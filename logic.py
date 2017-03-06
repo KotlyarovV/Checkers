@@ -5,7 +5,9 @@ from tkinter import *
 from board import *
 from cell import Cell
 
+
 class Logic():
+    
     def __init__(self, board):
         self.possible_move_whites = []
         self.possible_move_blacks = []
@@ -29,19 +31,15 @@ class Logic():
         for row in board.cells:
             for cell in row:
                 if cell.is_white and not cell.queen:
-                    if cell.column < len(row):
-                        if board.cells[cell.row][cell.column].is_empty():
-                            self.possible_move_whites.append([cell.column, cell.row, cell.column+1, cell.row+1])
-                    if cell.column > 1:
-                        if board.cells[cell.row][cell.column-2].is_empty():
-                            self.possible_move_whites.append([cell.column, cell.row, cell.column-1, cell.row+1])            
+                    if cell.column < len(row) and board.cells[cell.row][cell.column].is_empty():
+                        self.possible_move_whites.append([cell.column, cell.row, cell.column+1, cell.row+1])
+                    if cell.column > 1 and board.cells[cell.row][cell.column-2].is_empty():
+                        self.possible_move_whites.append([cell.column, cell.row, cell.column-1, cell.row+1])            
                 if cell.is_black and not cell.queen:
-                    if cell.column >1:
-                        if board.cells[cell.row-2][cell.column-2].is_empty():
-                            self.possible_move_blacks.append([cell.column, cell.row, cell.column-1, cell.row-1])
-                    if cell.column < len(row):
-                        if board.cells[cell.row-2][cell.column].is_empty():
-                            self.possible_move_blacks.append([cell.column, cell.row, cell.column+1, cell.row-1])
+                    if cell.column >1 and board.cells[cell.row-2][cell.column-2].is_empty():
+                        self.possible_move_blacks.append([cell.column, cell.row, cell.column-1, cell.row-1])
+                    if cell.column < len(row) and board.cells[cell.row-2][cell.column].is_empty():
+                        self.possible_move_blacks.append([cell.column, cell.row, cell.column+1, cell.row-1])
                 if cell.queen:
                     i = 1
                     while cell.column+i <= len(row) and cell.row+i<= len (board.cells):
@@ -85,11 +83,12 @@ class Logic():
                         else:
                             break
 
-    def need_to_kill(self, board):
-        
+
+    def need_to_kill(self, board):    
         for row in board.cells:
             for cell in row:
                 self.cell_need_kill([cell.column,cell.row],board)
+
 
     def cell_need_kill (self, cell_coordinats, board):
         
@@ -109,13 +108,13 @@ class Logic():
                             self.whites_need_kill.append([cell.column, cell.row, cell.column-2, cell.row+2])
                             self.be_killed_by_whites.append([cell.column-1, cell.row+1])
                             need_kill = True
-                    if cell.column >2 and cell.row>2:
+                    if cell.column >2 and cell.row > 2:
                         if board.cells[cell.row-2][cell.column-2].is_black and board.cells[cell.row-3][cell.column-3].is_empty():
                             self.need_kill_whites = True
                             self.whites_need_kill.append([cell.column, cell.row, cell.column-2, cell.row-2])
                             self.be_killed_by_whites.append([cell.column - 1, cell.row - 1])
                             need_kill = True
-                    if cell.column < len(row)-1 and cell.row>2:
+                    if cell.column < len(row)-1 and cell.row > 2:
                         if board.cells[cell.row-2][cell.column].is_black and board.cells[cell.row-3][cell.column+1].is_empty():
                             self.whites_need_kill.append([cell.column, cell.row, cell.column+2, cell.row-2])
                             self.be_killed_by_whites.append([cell.column+1, cell.row -1])
@@ -290,11 +289,8 @@ class Logic():
         elif self.need_kill_blacks:
             self.possible_move_blacks.extend(self.blacks_need_kill)
             self.blacks_need_kill = []
-
         return (need_kill)    
 
-
-        
         
     def make_best_moves(self, board):
         if not self.need_kill_blacks:

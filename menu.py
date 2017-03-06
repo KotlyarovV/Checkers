@@ -14,7 +14,9 @@ from step import Step
 import sys
 import log_worker
 
-class Menu (Frame):        
+
+class Menu (Frame):
+        
         def __init__(self,window):
             super(Menu, self).__init__(window)
             self.window = window
@@ -24,35 +26,33 @@ class Menu (Frame):
             self.level = None
             self.button1=Button(self,text='Blacks vs Player',width=25,height=5,bg='black',fg='red',font='arial 14')
             self.button1.bind("<Button-1>",self.blacks_vs_player)
-            self.button1.pack()
             self.button2=Button(self,text='Whites vs Player',width=25,height=5,bg='black',fg='red',font='arial 14')
             self.button2.bind("<Button-1>",self.whites_vs_player)
-            self.button2.pack()
             self.button3=Button(self,text='Player vs Player',width=25,height=5,bg='black',fg='red',font='arial 14')
             self.button3.bind("<Button-1>",self.player_vs_player)
-            self.button3.pack()
             self.button4=Button(self,text='Al vs Al',width=25,height=5,bg='black',fg='red',font='arial 14')
             self.button4.bind("<Button-1>",self.al_vs_al)
-            self.button4.pack()
             self.button5=Button(self,text='Load game',width=25,height=5,bg='black',fg='red',font='arial 14')
             self.button5.bind("<Button-1>",self.load_game)
-            self.button5.pack()
             self.button6=Button(self,text='Exit',width=25,height=5,bg='black',fg='red',font='arial 14')
             self.button6.bind("<Button-1>",self.exit_menu)
-            self.button6.pack()
-            self.buttons = [self.button1,self.button2,self.button3,self.button4,self.button5,self.button6]
+            self.buttons = [self.button1, self.button2, self.button3, self.button4, self.button5, self.button6]
+            self.pack_buttons(self.buttons)
             self.pack()
 
+        def pack_buttons(self, buttons):
+            for button in buttons:
+                    button.pack()
+            
         def choose_level(self,event):
             for button in self.buttons:
                     button.destroy()
             button1 = Button(self,text='Level 1',width=25,height=5,bg='black',fg='red',font='arial 14')
             button1.bind("<Button-1>",self.level1)
-            button1.pack()
             button2 = Button(self,text='Level 2',width=25,height=5,bg='black',fg='red',font='arial 14')
             button2.bind("<Button-1>",self.level2)
-            button2.pack()
-
+            buttons = [button1, button2]
+            self.pack_buttons(buttons)
 
 
         def choose_regim(self,event):
@@ -60,14 +60,12 @@ class Menu (Frame):
                     button.destroy()
             button1 = Button(self,text='Multiplayer server \n whites',width=25,height=5,bg='black',fg='red',font='arial 14')
             button1.bind("<Button-1>",self.multiplayer_server)
-            button1.pack()
             button2 = Button(self,text='Multiplayer client \n blacks',width=25,height=5,bg='black',fg='red',font='arial 14')
             button2.bind("<Button-1>",self.input_client)
-            button2.pack()
             button3 = Button(self,text='One computer',width=25,height=5,bg='black',fg='red',font='arial 14')
             button3.bind("<Button-1>",self.player_vs_player_s)
-            button3.pack()
             self.buttons = [button1,button2,button3]
+            self.pack_buttons(self.buttons)
 
 
         def two_players_variant(self,string):
@@ -102,20 +100,16 @@ class Menu (Frame):
                     lab = tkinter.Label(win,text="Wrong IP")
                     lab.pack()
                     return None
-
-
                 
             save_ip(self.ip)        
-            self.two_players_variant('multiplayer_client')
-
-            
-             
+            self.two_players_variant('multiplayer_client')     
             d = Data_Maker()
+            
             def blocking_board(event):
                     pass
+                
             self.board.make_usability(blocking_board)
             state = client.get_state(self.board, load_ip())
-            
             state = json.loads(state)
             state[1]['regim'] = 'multiplayer_client'
             d.decode_board(self.board, self.game, state)
@@ -182,9 +176,7 @@ class Menu (Frame):
             m.add_cascade(label="Help",menu=hm)
             hm.add_command(label="Help")
             
-            def load():
-            
-                                 
+            def load():              
                     try:
                             data = json.load( open('save', 'r') )
                             d = Data_Maker()
@@ -193,7 +185,6 @@ class Menu (Frame):
                             win = tkinter.Toplevel(self.window)
                             lab = tkinter.Label(win,text="Файла сохранения \n не существует!")
                             lab.pack()
-
 
             def window_top(string):
                     win = tkinter.Toplevel(self.window)
@@ -222,8 +213,7 @@ class Menu (Frame):
                             a.undo(self.board, self.game)
                     except Exception:
                             window_top("Невозможно отменить ход!")
-
-                    
+   
             def redo():
                     if self.variant == 'multiplayer_server' or self.variant == 'multiplayer_client':
                             window_top("Невозможно отменить ход!")
@@ -233,7 +223,6 @@ class Menu (Frame):
                             a.redo(self.board, self.game)
                     except Exception:
                             window_top("Невозможно перейти \n на ход вперед!")
-
 
             fm.add_command(label="Load",command=load)
             fm.add_command(label="Save...",command=save)
@@ -254,7 +243,7 @@ class Menu (Frame):
 
             self.window.tx.grid(row=0, column = 0)
             scrollbar.grid(row=0, column = 1,ipady=265)
-                        
+
         def load_game (self,event):
             try:
                     data = json.load( open('save', 'r') )

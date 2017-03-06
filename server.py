@@ -19,11 +19,6 @@ def send_state(string,board):
                 except Exception:
                         pass
         sock.close()
-        
-
-
-
-
 
 
 def get_state(board):

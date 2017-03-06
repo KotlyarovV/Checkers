@@ -1,5 +1,7 @@
 import datetime
 import cell
+
+
 def define_color(row,column):
     if (row % 2 == 1 and column % 2 == 1) or (row%2== 0 and column % 2 == 0):
         return "black"
@@ -12,11 +14,9 @@ def is_queen(board, column, row, column1, row1):
         return True
     if board.cells [row-1][column-1].is_black and row == 1:
         return True
-    if board.cells[row1-1][column1-1].queen:
-        return True
-    else:
-        return False
-    
+    return board.cells[row1-1][column1-1].queen
+
+
 def timer_tk(seconds, window):
     now = datetime.datetime.now()
     delta =  datetime.timedelta(seconds=seconds)
@@ -26,6 +26,7 @@ def timer_tk(seconds, window):
         except Exception:
             break
         continue
+
 
 def upcast_logic_cell(logic_cell, root , width, height):
     this_cell = cell.Cell(root,color = logic_cell.color, width = width, height = height, row = logic_cell.row , column = logic_cell.column) 
@@ -45,7 +46,16 @@ def stand_checkers(board, num_of_rows):
 
 
 def print_step(arr):
-    letters = {1:"A", 2:"B", 3:"C", 4:"D", 5:"E", 6:"F", 7:"G", 8:"H", 9:"I", 10:"J"}
+    letters = {1:"A",
+               2:"B",
+               3:"C",
+               4:"D",
+               5:"E",
+               6:"F",
+               7:"G",
+               8:"H",
+               9:"I",
+               10:"J"}
     return letters[arr[0]]+str(arr[1]) + " - "+letters[arr[2]]+str(arr[3])+ '\n'
 
 
@@ -58,12 +68,12 @@ def copy_board(board1,board2):
                 board2.cells[i][j].put_black()
             if board1.cells[i][j].queen:
                 board2.cells[i][j].became_queen()
-                
+
+  
 def save_ip(string):
     f = open('ip', 'w')
     f.write(string)
     f.close()
-
 
 
 def load_ip():

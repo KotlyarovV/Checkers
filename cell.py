@@ -1,8 +1,8 @@
 import copy
 from tkinter import *
 
-
 class Logic_Cell():
+    
     def __init__(self,  color, row, column):
         self.row = row
         self.column = column
@@ -30,10 +30,9 @@ class Logic_Cell():
     def is_empty(self):
         return not (self.is_white or self.is_black)
 
+
+class Cell(Button, Logic_Cell):
     
-
-
-class Cell(Button, Logic_Cell): 
     def __init__(self, root, color, width,height,row, column):
         Button.__init__(self,root, bg=color, width=width,height=height)
         Logic_Cell.__init__(self,color=color, row=row,column=column)
@@ -57,9 +56,4 @@ class Cell(Button, Logic_Cell):
         
     def became_queen(self):
         Logic_Cell.became_queen(self)
-        if self.is_white:
-            self['image'] = self.white_damka_picture
-        if self.is_black:
-            self['image'] = self.black_damka_picture
-        
-    
+        self['image'] = self.white_damka_picture if self.is_white else self.black_damka_picture

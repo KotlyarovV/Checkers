@@ -3,6 +3,8 @@ from tkinter import BOTH, END
 from cell import Cell
 from logic import Logic
 import json
+
+
 class Data_Maker:
     
     def encode_board(self,board,game):
@@ -10,32 +12,41 @@ class Data_Maker:
         for row in board.cells:
             for i in range (len(row)):
                 if row[i].is_black:
-                    if row[i].queen:
-                        board_string = board_string + "*"
-                    else:
-                        board_string = board_string + "@"
+                    board_string = board_string + "*" if row[i].queen else board_string + "@"
                 elif row[i].is_white:
-                    if row[i].queen:
-                        board_string = board_string + "#"
-                    else:
-                        board_string = board_string + "&"
+                    board_string = board_string + "#" if row[i].queen else board_string + "&"
                 else:
                     board_string = board_string + "0"
                 if i == (len(row) - 1):
                     board_string = board_string + "\n"
-        game_state = {"move_whites":game.move_whites, "seria":game.seria, "first_touch": True, "touched_cell_row": -1, "touched_cell_column": -1, 'regim' : game.regim,  'simple_log' : game.simple_log, 'level' :game.level }
+        game_state = {"move_whites":game.move_whites,
+                      "seria":game.seria,
+                      "first_touch": True,
+                      "touched_cell_row": -1,
+                      "touched_cell_column": -1,
+                      'regim' : game.regim,
+                      'simple_log' : game.simple_log,
+                      'level' :game.level }
         if not game.l is None:
-            game_logic = { 'possible_move_whites':game.l.possible_move_whites,'possible_move_blacks':game.l.possible_move_blacks, 'be_killed_by_whites':game.l.be_killed_by_whites, 'be_killed_by_blacks':game.l.be_killed_by_blacks }
+            game_logic = { 'possible_move_whites':game.l.possible_move_whites,
+                           'possible_move_blacks':game.l.possible_move_blacks,
+                           'be_killed_by_whites':game.l.be_killed_by_whites,
+                           'be_killed_by_blacks':game.l.be_killed_by_blacks }
         else:
-            game_logic = { 'possible_move_whites':[],'possible_move_blacks':[], 'be_killed_by_whites':[], 'be_killed_by_blacks':[]}
+            game_logic = { 'possible_move_whites':[],
+                           'possible_move_blacks':[],
+                           'be_killed_by_whites':[],
+                           'be_killed_by_blacks':[]}
         data = [ board_string, game_state, game_logic]
         return data
+
 
     def make_log (self,board,game):
         data = self.encode_board(board,game)
         string = json.dumps(data)
         return string
-                
+
+    
     def decode_board (self,board,game,data):
         for row in board.cells:
             for cell in row:

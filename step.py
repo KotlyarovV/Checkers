@@ -6,6 +6,7 @@ import json
 import client
 import server
 
+
 class Step():
     def __init__(self):
         self.move_whites = True
@@ -46,9 +47,9 @@ class Step():
             d.decode_board(board, self, state)
         
     def step_maker (self,board, regim, level):
-        self.level = level   
-        if regim == 'player_vs_player' or regim == 'multiplayer_client' or regim == 'multiplayer_server':
-            self.regim = regim
+        self.level = level
+        self.regim = regim
+        if regim == 'player_vs_player' or regim == 'multiplayer_client' or regim == 'multiplayer_server':   
             def button_clicked(event):
                 if not self.seria:
                     self.l = Logic (board)
@@ -59,7 +60,6 @@ class Step():
             return button_clicked
         
         if regim == 'blacks_vs_player':
-            self.regim = 'blacks_vs_player'
             def button_clicked(event):
                 if not self.seria:
                     self.l = Logic (board)
@@ -70,7 +70,6 @@ class Step():
             return button_clicked
 
         if regim == 'whites_vs_player':            
-            self.regim = 'whites_vs_player'
             def button_clicked(event):
                 if not self.seria:
                     self.l = Logic (board)
@@ -81,7 +80,6 @@ class Step():
             return button_clicked
 
         if regim == 'al_vs_al':
-            self.regim = 'al_vs_al'
             while board.victory_cond == False:
                 if not self.seria:
                     self.l = Logic (board)
@@ -98,7 +96,6 @@ class Step():
                     except Exception:
                         break
                     util.timer_tk(1,board.window)
-
 
 
     def moving_blacks(self,board):
@@ -185,10 +182,19 @@ class Step():
                 
         elif [self.touched_cell_column, self.touched_cell_row, event.widget.column, event.widget.row] in self.l.possible_move_blacks:
             board.move_checker([self.touched_cell_column, self.touched_cell_row, event.widget.column, event.widget.row])
-            board.window.tx.insert(END,util.print_step([self.touched_cell_column, self.touched_cell_row, event.widget.column, event.widget.row]))
-            self.simple_log = self.simple_log + util.print_step([self.touched_cell_column, self.touched_cell_row, event.widget.column, event.widget.row])
+            board.window.tx.insert(END,util.print_step([self.touched_cell_column,
+                                                        self.touched_cell_row,
+                                                        event.widget.column,
+                                                        event.widget.row]))
+            self.simple_log = self.simple_log + util.print_step([self.touched_cell_column,
+                                                                 self.touched_cell_row,
+                                                                 event.widget.column,
+                                                                 event.widget.row])
             if self.l.need_kill_blacks:
-                board.kill_checker(self.l.be_killed_by_blacks[self.l.possible_move_blacks.index([self.touched_cell_column, self.touched_cell_row, event.widget.column, event.widget.row])])
+                board.kill_checker(self.l.be_killed_by_blacks[self.l.possible_move_blacks.index([self.touched_cell_column,
+                                                                                                 self.touched_cell_row,
+                                                                                                 event.widget.column,
+                                                                                                 event.widget.row])])
                 self.l = Logic(board)
                 if self.l.cell_need_kill ([event.widget.column, event.widget.row], board):
                     self.first_touch = True
@@ -227,7 +233,10 @@ class Step():
             board.window.tx.insert(END,util.print_step([self.touched_cell_column, self.touched_cell_row, event.widget.column, event.widget.row]))
             self.simple_log = self.simple_log + util.print_step([self.touched_cell_column, self.touched_cell_row, event.widget.column, event.widget.row])
             if self.l.need_kill_whites:
-                board.kill_checker(self.l.be_killed_by_whites[self.l.possible_move_whites.index([self.touched_cell_column, self.touched_cell_row, event.widget.column, event.widget.row])])
+                board.kill_checker(self.l.be_killed_by_whites[self.l.possible_move_whites.index([self.touched_cell_column,
+                                                                                                 self.touched_cell_row,
+                                                                                                 event.widget.column,
+                                                                                                 event.widget.row])])
                 self.l = Logic(board)
                 if self.l.cell_need_kill ([event.widget.column, event.widget.row], board):
                     self.first_touch = True

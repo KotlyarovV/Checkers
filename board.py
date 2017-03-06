@@ -11,16 +11,12 @@ class LogicBoard:
 
         def make_field(self, x, y):
             for i in range(x):
-                row = []
-                self.cells.append(row)
+                self.cells.append([])
                 for j in range (y):
                         self.cells[i].append(Logic_Cell(color=define_color(i+1,j+1) ,  row = i+1, column = j+1))       
 
         def move_checker (self, coordinats):
-            column1 = coordinats[0]
-            row1 = coordinats[1]
-            column2= coordinats [2]
-            row2 = coordinats[3]
+            [column1, row1, column2, row2] = coordinats
             if  self.cells[row1-1][column1-1].is_black:
                 self.cells[row2-1][column2-1].put_black()
             if  self.cells[row1-1][column1-1].is_white:
@@ -30,8 +26,7 @@ class LogicBoard:
             self.cells[row1-1][column1-1].clear()
                 
         def kill_checker (self, coordinats):
-            column = coordinats[0]
-            row = coordinats[1]
+            [column, row] = coordinats
             self.cells[row-1][column-1].clear()
 
         def stand_checkers(board, num_of_rows):
@@ -48,11 +43,7 @@ class LogicBoard:
         def victory(self):
             self.victory_cond = True
             self.victory = True
-
-
-            
-
-
+ 
 
 class Board (tkinter.Frame, LogicBoard):
         
@@ -67,8 +58,7 @@ class Board (tkinter.Frame, LogicBoard):
 
         def make_field(board, x, y):
             for i in range(x):
-                row = []
-                board.cells.append(row)
+                board.cells.append([])
                 for j in range (y):
                         board.cells[i].append(Cell(board,  color=define_color(i+1,j+1) , width=50,height=50, row = i+1, column = j+1))
                         board.cells[i][j]['image']=board.empty
